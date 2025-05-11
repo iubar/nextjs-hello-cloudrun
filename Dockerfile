@@ -24,7 +24,7 @@ COPY package*.json ./
 # RUN npm ci --only=production
 #
 # Installa tutte le dipendenze, incluse devDependencies
-RUN npm ci
+RUN npm install
 
 # Step 5: Copiare il resto del progetto (tutti i file)
 COPY . .

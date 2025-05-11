@@ -18,7 +18,7 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copia solo i file necessari per le dipendenze
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Con il comando seguente non verrebbero installati tsc, e non si potrebbero quindi processare i file .ts.
 # Infatti, ignora tutte le devDependencies (come eslint, typescript, jest, ecc)
@@ -61,9 +61,9 @@ USER node
 # COPY --chown=node:node --from=builder /app/.next/static ./.next/static
 COPY --chown=node:node --from=builder /app/.next ./.next
 COPY --chown=node:node --from=builder /app/public ./public
-COPY --chown=node:node --from=builder /app/next.config.js ./next.config.js
-COPY --chown=node:node --from=builder /app/package.json ./package.json
-
+# COPY --chown=node:node --from=builder /app/next.config.js ./next.config.js
+# COPY --chown=node:node --from=builder /app/package.json ./package.json
+ 
 # Espone la porta 8080 per Cloud Run
 EXPOSE 8080
 
