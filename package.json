@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build -p 8080",
+    "dev": "next dev -p 8080 --turbopack",
+    "build": "next build",
     "start": "next start -p 8080",
     "start-prod-win": "set NODE_ENV=production && set PORT=8080 && node .next\\standalone\\server.js",
     "start-prod-linux": "NODE_ENV=production PORT=8080 node .next/standalone/server.js",
