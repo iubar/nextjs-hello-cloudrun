@@ -34,3 +34,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Standalone
+
+Importante:
+Anche se il progetto è scritto in TypeScript, Next.js lo transpila in JavaScript durante la build.
+Quindi non servono ts-node, tsconfig.json, o altri tool TypeScript a runtime.
+La cartella .next/standalone/ contiene solo JavaScript compilato e i file necessari per eseguire l’app.
+
+# Migliora le performance
+
+Con NODE_ENV=production:
+
+- React disattiva i warning e strumenti di debug
+- Next.js attiva ottimizzazioni lato server
+- Alcuni logger scrivono meno output
+
+Molte dipendenze (come Express, Next.js, React) si comportano in modo diverso se NODE_ENV è impostato su production

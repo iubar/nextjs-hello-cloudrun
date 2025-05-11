@@ -1,5 +1,38 @@
-node_modules
-.next
+ 
 .git
 Dockerfile
 deploy.sh
+
+
+# Node modules
+node_modules
+# node_modules verrà rigenerato dalla RUN npm run build
+.npm
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Output delle build 
+.next
+# .next verrà rigenerato dalla RUN npm run build
+out
+dist
+
+# File temporanei e cache
+*.swp
+*.swo
+.env
+.env.local
+.env.*.local
+# i file .env sono ignorati per sicurezza, evita di copiare segreti nel container
+.cache
+turbo
+

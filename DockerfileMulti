@@ -1,0 +1,72 @@
+# Nel tuo next.config.ts assicurati di avere:
+# const nextConfig: NextConfig = {
+#  output: "standalone"
+#};
+
+# Note:
+# - Il primo stadio (builder) costruisce il progetto (compilando Next.js).
+# - Il secondo stadio (runtime) copia solo i file necessari per l'esecuzione dell'app (evitando di includere file inutili come quelli relativi allo sviluppo).
+# Questo approccio riduce le dimensioni dell'immagine finale, poiché nel container di runtime vengono inclusi solo i file necessari per eseguire l'app.
+
+
+# ============================
+# STAGE 1: Build
+# ============================
+FROM node:18-alpine AS builder
+
+# Imposta la directory di lavoro
+WORKDIR /app
+
+# Copia solo i file necessari per le dipendenze
+COPY package*.json ./
+
+# Con il comando seguente non verrebbero installati tsc, e non si potrebbero quindi processare i file .ts.
+# Infatti, ignora tutte le devDependencies (come eslint, typescript, jest, ecc)
+# RUN npm ci --only=production
+#
+# Installa tutte le dipendenze, incluse devDependencies
+RUN npm ci
+
+# Copia il resto del progetto
+COPY . .
+
+# Costruisci il progetto in modalità standalone
+RUN npm run build
+
+# ============================
+# STAGE 2: Runtime
+# ============================
+FROM node:18-alpine AS runner
+
+# Imposta la variabile d’ambiente per la produzione
+ENV NODE_ENV=production
+ENV PORT=8080
+
+# Imposta la directory di lavoro
+WORKDIR /app
+USER node
+
+# Modalità standalone – Dopo next build
+#
+# .next/
+# ├── standalone/
+# │   ├── server.js            ✅ entrypoint dell’app
+# │   ├── node_modules/        ✅ solo le dipendenze usate
+# │   ├── ...
+# │   └── app/ (o pages/)
+# ├── static/                  ✅ assets pubblici
+
+# Copia solo la build ottimizzata dal builder
+# COPY --chown=node:node --from=builder /app/.next/standalone ./
+# COPY --chown=node:node --from=builder /app/.next/static ./.next/static
+COPY --chown=node:node --from=builder /app/.next ./.next
+COPY --chown=node:node --from=builder /app/public ./public
+COPY --chown=node:node --from=builder /app/next.config.js ./next.config.js
+COPY --chown=node:node --from=builder /app/package.json ./package.json
+
+# Espone la porta 8080 per Cloud Run
+EXPOSE 8080
+
+# Avvia il server Next.js
+# CMD ["node", "server.js"]
+CMD ["node", ".next/standalone/server.js"]
