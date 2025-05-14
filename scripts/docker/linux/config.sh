@@ -12,4 +12,4 @@ IMAGE_NAME="hello-nextjs-cloudrun-image"
 
 CONTAINER_NAME="hello-nextjs-cloudrun-container"
 
-LOCAL_PORT=81
+LOCAL_PORT=82
