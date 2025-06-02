@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node_executor:
     docker:
-      - image: cimg/node:18.20.2  # Scegli la versione Node che usi
+      - image: cimg/node:18.20
     working_directory: ~/app
 
 jobs:
@@ -22,7 +22,12 @@ jobs:
           paths:
             - node_modules
           key: node-deps-v1-{{ checksum "package-lock.json" }}
-
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - package.json
+            - package-lock.json
   lint:
     executor: node_executor
     steps:
