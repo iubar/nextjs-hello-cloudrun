@@ -32,6 +32,9 @@ COPY . .
 # Step 6: Creare la build di Next.js per la produzione
 RUN npm run build
 
+# Copia la cartella public (asset statici)
+COPY public .next/public
+
 # Step 7: Esporre la porta sulla quale Next.js sarà in ascolto
 EXPOSE 8080
 # Per GCP sono obbligato ad esporre la porta 8080 (invece della 3000 di default)

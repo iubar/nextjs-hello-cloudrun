@@ -1,3 +1,4 @@
+# La modalità standalone consente di creare una build più leggera e autonoma.
 # Nel tuo next.config.ts assicurati di avere:
 # const nextConfig: NextConfig = {
 #  output: "standalone"
@@ -59,8 +60,8 @@ USER node
 # Copia solo la build ottimizzata dal builder
 # COPY --chown=node:node --from=builder /app/.next/standalone ./
 # COPY --chown=node:node --from=builder /app/.next/static ./.next/static
-COPY --chown=node:node --from=builder /app/.next ./.next
-COPY --chown=node:node --from=builder /app/public ./public
+COPY --chown=node:node --from=builder .next ./.next
+COPY --chown=node:node --from=builder public ./public
 # COPY --chown=node:node --from=builder /app/next.config.js ./next.config.js
 # COPY --chown=node:node --from=builder /app/package.json ./package.json
  
@@ -68,5 +69,6 @@ COPY --chown=node:node --from=builder /app/public ./public
 EXPOSE 8080
 
 # Avvia il server Next.js
-# CMD ["node", "server.js"]
+# CMD ["node", "server.js"]s
+# CMD ["npm", "start"] # richiede in package.json lo script {"start": "next start -p 8080"}
 CMD ["node", ".next/standalone/server.js"]
