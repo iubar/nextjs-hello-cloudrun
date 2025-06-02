@@ -34,6 +34,12 @@ COPY . .
 # Costruisci il progetto in modalità standalone
 RUN npm run build
 
+# Copia la cartella public (asset statici)
+# Implemento il comando seguente, come descritto nella guida https://nextjs.org/docs/app/api-reference/config/next-config-js/output
+# cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/
+COPY public .next/standalone/public
+COPY .next/static .next/standalone/.next/static
+
 # ============================
 # STAGE 2: Runtime
 # ============================
@@ -54,14 +60,25 @@ USER node
 # │   ├── server.js            ✅ entrypoint dell’app
 # │   ├── node_modules/        ✅ solo le dipendenze usate
 # │   ├── ...
-# │   └── app/ (o pages/)
+# │   ├── .next/static/
+# │   ├── public/
+# │   └── app/
+# |    
 # ├── static/                  ✅ assets pubblici
 
 # Copia solo la build ottimizzata dal builder
-# COPY --chown=node:node --from=builder /app/.next/standalone ./
+COPY --chown=node:node --from=builder /app/.next/standalone ./
+# /
+# ├── standalone/
+# │   ├── server.js
+# │   ├── ...
+# │   ├── .next/
+# │   ├── public/
+# │   └── app/
+
 # COPY --chown=node:node --from=builder /app/.next/static ./.next/static
-COPY --chown=node:node --from=builder .next ./.next
-COPY --chown=node:node --from=builder public ./public
+# COPY --chown=node:node --from=builder .next ./.next
+# COPY --chown=node:node --from=builder public ./public
 # COPY --chown=node:node --from=builder /app/next.config.js ./next.config.js
 # COPY --chown=node:node --from=builder /app/package.json ./package.json
  
