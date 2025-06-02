@@ -37,7 +37,8 @@ RUN npm run build
 # Implemento il comando seguente, come descritto nella guida https://nextjs.org/docs/app/api-reference/config/next-config-js/output
 # cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/
 COPY public .next/standalone/public
-COPY .next/static .next/standalone/.next/static
+RUN cp -r .next/static .next/standalone/.next/
+# ...questi ultimi sono gli asset statici generati automaticamente dal processo di build
 
 # Step 7: Espone la porta sulla quale Next.js sarà in ascolto
 EXPOSE 8080
