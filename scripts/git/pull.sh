@@ -68,10 +68,11 @@ if [ $? -ne 0 ]; then
   echo "❌ Errore durante il pull"
   exit 1
 fi
-
 echo ""
 echo "✅🔄 Pull completato!"
+
 echo ""
+
 echo "Ora rendo eseguibili tutti gli script sh del progetto..."	
 echo ""
 chmod +x $SCRIPT_DIR/chmod_all_sh_with_confirmation.sh

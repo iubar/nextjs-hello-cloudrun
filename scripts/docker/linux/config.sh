@@ -9,6 +9,7 @@ SCRIPT_DIR="${SCRIPT_DIR%/}"
 PROJECT_ROOT="$SCRIPT_DIR/../../.."
 
 IMAGE_NAME="hello-nextjs-cloudrun-image"
+IMAGE_TAG="latest"
 
 CONTAINER_NAME="hello-nextjs-cloudrun-container"
 

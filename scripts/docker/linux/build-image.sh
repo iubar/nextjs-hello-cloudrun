@@ -15,7 +15,7 @@ source "$SCRIPT_DIR/config.sh"
 
 echo "🚀 📦 🐳 Building the image..."
 echo "... ⏳ wait please ..."
-docker build -t "${IMAGE_NAME}:latest" "$PROJECT_ROOT"
+docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" "$PROJECT_ROOT"
 
 if [ $? -ne 0 ]; then
     echo "❌ Il comando è fallito!"

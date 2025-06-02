@@ -10,6 +10,4 @@ echo "🛠️ ⚙️ Questo script si trova in: $SCRIPT_DIR"
 
 source $SCRIPT_DIR/build-image.sh
 
-source $SCRIPT_DIR/build-image.sh
-
 source $SCRIPT_DIR/run-container.sh
