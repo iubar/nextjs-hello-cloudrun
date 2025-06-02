@@ -1,3 +1,5 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/iubar/nextjs-hello-cloudrun/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/iubar/nextjs-hello-cloudrun/tree/main)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
