@@ -39,7 +39,7 @@ RUN npm run build
 # cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/
 COPY public .next/standalone/public
 RUN cp -r .next/static .next/standalone/.next/
-# ...questi ultimi sono gli asset statici generati automaticamente dal processo di build
+# ...questi ultimi sono gli asset statici generati automaticamente dal processo di build (es: File JavaScript e CSS ottimizzati + Assets generati dal compilatore di Next.js)
 
 # ============================
 # STAGE 2: Runtime

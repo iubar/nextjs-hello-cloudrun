@@ -1,0 +1,70 @@
+version: 2.1
+
+executors:
+  node_executor:
+    docker:
+      - image: cimg/node:18.20.2  # Scegli la versione Node che usi
+    working_directory: ~/app
+
+jobs:
+  install_dependencies:
+    executor: node_executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-deps-v1-{{ checksum "package-lock.json" }}
+            - node-deps-v1-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          paths:
+            - node_modules
+          key: node-deps-v1-{{ checksum "package-lock.json" }}
+
+  lint:
+    executor: node_executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Linting
+          command: npm run lint
+
+  # test:
+  #   executor: node_executor
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: ~/app
+  #     - run:
+  #         name: Run Tests
+  #         command: npm run test
+
+  build:
+    executor: node_executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Build Next.js app
+          command: npm run build
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - install_dependencies
+      - lint:
+          requires:
+            - install_dependencies
+      # - test:
+      #     requires:
+      #       - install_dependencies
+      - build:
+          requires:
+            # - test
+            - lint
