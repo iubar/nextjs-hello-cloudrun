@@ -19,12 +19,12 @@ COPY package*.json ./
 
 # Step 4: Installare le dipendenze
 
-# Con il comando seguente non verrebbero installati tsc, e non si potrebbero quindi processare i file .ts.
-# Infatti, ignora tutte le devDependencies (come eslint, typescript, jest, ecc)
-# RUN npm ci --only=production
+# Non usare il comando seguene:
+# RUN npm ci --omit=dev
+# Infatti, questo ignora tutte le devDependencies di cui "next build" necessita (come ad esempio @types, eslint, tailwind, babel, typescript, jest, ecc.)
 #
-# Installa tutte le dipendenze, incluse devDependencies
-RUN npm install
+# Installa invece anche le tutte le dipendenze di sviluppo (devDependencies)
+RUN npm ci
 
 # Step 5: Copia il resto del progetto (tutti i file)
 COPY . .
