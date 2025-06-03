@@ -53,6 +53,28 @@ default:
     - ssh -V   
     - ssh-keyscan -p ${SSH_PORT} -t ed25519 -H ${REMOTE_HOST} >> ~/.ssh/known_hosts     
     - ls ~/.ssh -lah
+.ssh-stage-template:
+  variables:
+    REMOTE_HOST: '192.168.0.201'
+    SSH_USER: 'stage'
+    SSH_PORT: '22'
+  before_script:
+    - cat /etc/*-release && uname -a
+    - hostname
+    - whoami
+    - mkdir -p ~/.ssh
+    # La variabile d'ambiente è stata creata con il seguente comando
+    # base64 -w 0 ~/.ssh/id_ed25519 > id_ed25519.base64
+    # Nota che l'argomento -w 0 garantisce che l'output sia tutto su una singola riga (importante per GitLab).
+    - echo $STAGE_PPK_OPENSSH_BASE64 | base64 --decode > ~/.ssh/id_ed25519
+    # alternativa simile :
+    # - echo ${STAGE_PPK_OPENSSH_BASE64} | openssl enc -base64 -d > ~/.ssh/id_ed25519_stage    
+    - chmod 600 ~/.ssh/id_ed25519
+    - echo "Remote host ${REMOTE_HOST}"
+    - ssh-keyscan -p ${SSH_PORT} -t ed25519 -H ${REMOTE_HOST} > ~/.ssh/known_hosts
+    - ls ~/.ssh -lah
+    - ssh -V    
+  allow_failure: true     
 build:
   stage: build
   tags:
@@ -83,14 +105,43 @@ outdated:
     - npm run outdate
   only:
     - main
-deploy:
+stage-on-efesto:
+  extends: .ssh-stage-template
+  stage: deploy
+  tags:
+    - expo
+  variables:
+    SFTP_REMOTE_PATH: /var/www/pagheopen-sandbox
+    LOCAL_PATH: ./dist/client
+  script:
+    # Prima di calcolare il fingerprint devo estrarre la chiave pubblica...
+    - ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
+    # Caloclo il fingerprint...
+    - ssh-keygen -l -f ~/.ssh/id_ed25519.pub
+    # Eegui il comando "hostname" sull'host remoto    
+    - ssh -i ~/.ssh/id_ed25519 -T ${SSH_USER}@${REMOTE_HOST} hostname
+    # -T disabilita l'allocazione del TTY (nessun terminale interattivo)
+    # Se non usi -i, SSH usa la chiave predefinita o quella indicata in ~/.ssh/config
+    # Esegui uno scritp bash su host remoto:
+    # - ssh -T ${SSH_USER}@${REMOTE_HOST} /opt/iubar/scripts/deploy.sh https://gitlab.iubar.it/iubar/pagheopen-site-astro.git /opt/iubar/pagheopen-site-astro
+    - echo 'TODO....'
+  when: manual
+  allow_failure: true
+  only:
+    - main     
+deploy-on-docker:
   extends: .ssh-template
   stage: deploy
   tags:
     - expo
   script:
-    - ssh -T ${SSH_USER}@${REMOTE_HOST} hostname  
-    - ssh -T ${SSH_USER}@${REMOTE_HOST} /opt/iubar/scripts/deploy.sh https://gitlab.iubar.it/iubar/iubar-nextjs-hello.git /opt/iubar/iubar-nextjs-hello
+    #- ssh -T ${SSH_USER}@${REMOTE_HOST} hostname  
+    #- ssh -T ${SSH_USER}@${REMOTE_HOST} /opt/iubar/scripts/deploy.sh https://gitlab.iubar.it/iubar/iubar-nextjs-hello.git /opt/iubar/iubar-nextjs-hello
+    - echo 'TODO....'
+  when: manual
+  allow_failure: true
+  only:
+    - main
 e2e:
   stage: e2e
   tags:

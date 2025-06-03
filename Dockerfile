@@ -64,7 +64,6 @@ ENV NODE_ENV=production
 # 4. Importa solo codice di produzione: alcune librerie (es. debug, dotenv, chalk, ecc.) usano NODE_ENV per non caricare moduli inutili in produzione.
 
 # Step 9: Esegue il server in modalità produzione
-# CMD ["npm", "start"]
 # CMD ["npm", "start"] # richiede in package.json lo script {"start": "next start -p 8080"}
 # Avvia l'app Next.js
 CMD ["node", ".next/standalone/server.js"]

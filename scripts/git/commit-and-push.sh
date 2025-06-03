@@ -24,8 +24,9 @@ echo
 echo "🔍 Aggiunta SOLO dei file già tracciati (modificati o cancellati)."
 echo 
 
-# Aggiunge solo file già tracciati modificati o cancellati
+# Aggiunge solo file già tracciati (modificati o cancellati) ed esclude i nuovi file non tracciati (ovvero non li aggiunge)
 git add -u
+
 
 # Aggiungi tutti i file modificati e nuovi
 # git add -A
@@ -38,15 +39,16 @@ fi
 
 # Messaggio di commit di default
 DEFAULT_MSG="Aggiornamento del $(date +'%Y-%m-%d %H:%M')"
-
 # Chiedi all’utente un messaggio di commit
 read -p "✏️  Inserisci un messaggio di commit [${DEFAULT_MSG}]: " COMMIT_MSG
-
 # Usa messaggio di default se l’utente non scrive nulla
 COMMIT_MSG="${COMMIT_MSG:-$DEFAULT_MSG}"
-
 # Esegui il commit
 git commit -m "$COMMIT_MSG"
+if [ $? -ne 0 ]; then
+  echo "❌ Errore durante il commit."
+  exit 1
+fi
 
 # Esegui il push
 git push
