@@ -2,7 +2,7 @@ stages:
   - build
   - lint
   - quality
-  - deploy  
+  - deploy
   - e2e
 default:
   cache: # https://docs.gitlab.com/ee/ci/caching/ https://docs.gitlab.com/ee/ci/yaml/#cache
@@ -13,7 +13,7 @@ default:
     # see https://docs.gitlab.com/ee/ci/variables/
     - echo "CI_PROJECT_ID '${CI_PROJECT_ID}', CI_PROJECT_DIR = '${CI_PROJECT_DIR}', CI_COMMIT_REF_SLUG = '${CI_COMMIT_REF_SLUG}'"
     - echo "branch or tag name = '${CI_COMMIT_REF_NAME}', job = '${CI_JOB_NAME}', stage = '${CI_JOB_STAGE}', commit message = '$CI_COMMIT_MESSAGE'"
-    - uname -a    
+    - uname -a
     - hostname
     - whoami
     - pwd
@@ -49,15 +49,15 @@ default:
     - mv ~/.ssh/id_ed25519_prod ~/.ssh/id_ed25519
     # Configuring the "known_hosts" file...
     # - cp ~/.ssh/known_hosts ~/.ssh/known_hosts.old || true # il file potrebbe non esistere
-    - rm ~/.ssh/known_hosts || true 
-    - ssh -V   
-    - ssh-keyscan -p ${SSH_PORT} -t ed25519 -H ${REMOTE_HOST} >> ~/.ssh/known_hosts     
+    - rm ~/.ssh/known_hosts || true
+    - ssh -V
+    - ssh-keyscan -p ${SSH_PORT} -t ed25519 -H ${REMOTE_HOST} >> ~/.ssh/known_hosts
     - ls ~/.ssh -lah
 .ssh-stage-template:
   variables:
-    REMOTE_HOST: '192.168.0.201'
-    SSH_USER: 'stage'
-    SSH_PORT: '22'
+    REMOTE_HOST: "192.168.0.201"
+    SSH_USER: "stage"
+    SSH_PORT: "22"
   before_script:
     - cat /etc/*-release && uname -a
     - hostname
@@ -68,13 +68,13 @@ default:
     # Nota che l'argomento -w 0 garantisce che l'output sia tutto su una singola riga (importante per GitLab).
     - echo $STAGE_PPK_OPENSSH_BASE64 | base64 --decode > ~/.ssh/id_ed25519
     # alternativa simile :
-    # - echo ${STAGE_PPK_OPENSSH_BASE64} | openssl enc -base64 -d > ~/.ssh/id_ed25519_stage    
+    # - echo ${STAGE_PPK_OPENSSH_BASE64} | openssl enc -base64 -d > ~/.ssh/id_ed25519_stage
     - chmod 600 ~/.ssh/id_ed25519
     - echo "Remote host ${REMOTE_HOST}"
     - ssh-keyscan -p ${SSH_PORT} -t ed25519 -H ${REMOTE_HOST} > ~/.ssh/known_hosts
     - ls ~/.ssh -lah
-    - ssh -V    
-  allow_failure: true     
+    - ssh -V
+  allow_failure: true
 build:
   stage: build
   tags:
@@ -95,7 +95,7 @@ prettier:
   script:
     - echo "Checking formatting rules..."
     - npm run --silent format:check
-  allow_failure: true    
+  allow_failure: true
 outdated:
   stage: quality
   tags:
@@ -118,7 +118,7 @@ stage-on-efesto:
     - ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
     # Caloclo il fingerprint...
     - ssh-keygen -l -f ~/.ssh/id_ed25519.pub
-    # Eegui il comando "hostname" sull'host remoto    
+    # Eegui il comando "hostname" sull'host remoto
     - ssh -i ~/.ssh/id_ed25519 -T ${SSH_USER}@${REMOTE_HOST} hostname
     # -T disabilita l'allocazione del TTY (nessun terminale interattivo)
     # Se non usi -i, SSH usa la chiave predefinita o quella indicata in ~/.ssh/config
@@ -128,14 +128,14 @@ stage-on-efesto:
   when: manual
   allow_failure: true
   only:
-    - main     
+    - main
 deploy-on-docker:
   extends: .ssh-template
   stage: deploy
   tags:
     - expo
   script:
-    #- ssh -T ${SSH_USER}@${REMOTE_HOST} hostname  
+    #- ssh -T ${SSH_USER}@${REMOTE_HOST} hostname
     #- ssh -T ${SSH_USER}@${REMOTE_HOST} /opt/iubar/scripts/deploy.sh https://gitlab.iubar.it/iubar/iubar-nextjs-hello.git /opt/iubar/iubar-nextjs-hello
     - echo 'TODO....'
   when: manual

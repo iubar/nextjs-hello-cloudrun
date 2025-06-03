@@ -14,7 +14,7 @@ echo ""
 
 BATCH_MODE=0
 if [ "$1" == "true" ] || [ "$1" == "1" ]; then
-   BATCH_MODE=1
+    BATCH_MODE=1
 fi
 
 echo "🛠️ ⚙️ Questo script si trova in: ${SCRIPT_DIR}"

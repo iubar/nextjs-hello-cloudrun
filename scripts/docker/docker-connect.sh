@@ -13,10 +13,10 @@ source "${SCRIPT_DIR}/config.sh"
 
 # Controlla se è stato passato un argomento e in tal caso effettuo l'override dall configurazione
 # if [ -z "$1" ]; then
-  # CONTAINER_NAME=$1
+# CONTAINER_NAME=$1
 # fi
 
-docker exec -it ${CONTAINER_NAME} /bin/bash 
+docker exec -it ${CONTAINER_NAME} /bin/bash
 
 if [ $? -ne 0 ]; then
     echo "❌ Il comando exec è fallito!"

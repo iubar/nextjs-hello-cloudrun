@@ -9,8 +9,8 @@ echo "📁📍 Cartella corrente: $(pwd)"
 
 # Verifica se siamo in una directory Git
 if [ ! -d ".git" ]; then
-  echo "❌ Non è una directory Git valida."
-  exit 1
+    echo "❌ Non è una directory Git valida."
+    exit 1
 fi
 
 PROJECT_ROOT=$(pwd)
@@ -18,15 +18,14 @@ echo "📁 Project root path is: ${PROJECT_ROOT}"
 
 #########################################
 
-echo 
+echo
 echo "📦 Preparazione al push del progetto Git..."
-echo 
+echo
 echo "🔍 Aggiunta SOLO dei file già tracciati (modificati o cancellati)."
-echo 
+echo
 
 # Aggiunge solo file già tracciati (modificati o cancellati) ed esclude i nuovi file non tracciati (ovvero non li aggiunge)
 git add -u
-
 
 # Aggiungi tutti i file modificati e nuovi
 # git add -A
@@ -46,8 +45,8 @@ COMMIT_MSG="${COMMIT_MSG:-$DEFAULT_MSG}"
 # Esegui il commit
 git commit -m "$COMMIT_MSG"
 if [ $? -ne 0 ]; then
-  echo "❌ Errore durante il commit."
-  exit 1
+    echo "❌ Errore durante il commit."
+    exit 1
 fi
 
 # Esegui il push
@@ -55,8 +54,8 @@ git push
 
 # Verifica se il push è riuscito
 if [ $? -eq 0 ]; then
-  echo "✅ Modifiche inviate con successo."
+    echo "✅ Modifiche inviate con successo."
 else
-  echo "❌ Errore durante il push."
-  exit 1
+    echo "❌ Errore durante il push."
+    exit 1
 fi
