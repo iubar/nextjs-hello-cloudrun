@@ -41,12 +41,15 @@ RUN cp -r .next/static .next/standalone/.next/
 # ...questi ultimi sono gli asset statici generati automaticamente dal processo di build (es: File JavaScript e CSS ottimizzati + Assets generati dal compilatore di Next.js)
 
 # Step 7: Espone la porta sulla quale Next.js sarà in ascolto
-EXPOSE 8080
 # Per GCP sono obbligato ad esporre la porta 8080 (invece della 3000 di default)
+EXPOSE 8080
 
-# Step 9: Imposta variabili di ambiente per Node.js
+# Step 8: Imposta variabili di ambiente per Node.js (per tutte le successive istruzioni di build e per il container finale)
+
+# Dovendo esporre la porta 8080, devo personalizzare anche la porta di NextJs:
+# (Nota che questo statement è un'alterantiva all'indicazione esplicita della porta con'argomento -p nei comandi definiti in package.json (ad esempio : {"start": "next start -p 8080"})
 ENV PORT=8080
-# Avendo esposto la porta 8080, devo personalizzare anche la porta di NextJs:
+
 ENV NODE_ENV=production
 # In un'applicazione Node.js (inclusi framework come Next.js, Express, ecc.), la variabile NODE_ENV definisce il contesto di esecuzione. 
 # Le tre modalità comuni sono: "development", "production", "test"

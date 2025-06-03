@@ -9,22 +9,30 @@
     "start-prod-win": "set NODE_ENV=production && set PORT=8080 && node .next\\standalone\\server.js",
     "start-prod": "NODE_ENV=production PORT=8080 node .next/standalone/server.js",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "format-abstract": "prettier \"**/*{.yml,.sh,.js,.ts,.tsx,.astro}\"",
+    "format-write": "npm run format-abstract -- --write",
+    "format-check": "npm run format-abstract -- --check",
+    "clean": "rimraf node_modules"    
   },
   "dependencies": {
+    "next": "15.3.3",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "next": "15.3.3"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
-    "@eslint/eslintrc": "^3"
+    "prettier": "^3.5.3",
+    "prettier-plugin-sh": "^0.17.4",
+    "prettier-plugin-tailwindcss": "^0.6.12",    
+    "rimraf": "^6.0.1",    
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

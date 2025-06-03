@@ -48,6 +48,9 @@ FROM node:18-alpine AS runner
 
 # Imposta la variabile d’ambiente per la produzione
 ENV NODE_ENV=production
+
+# Dovendo esporre la porta 8080, devo personalizzare anche la porta di NextJs:
+# (Nota che questo statement è un'alterantiva all'indicazione esplicita della porta con'argomento -p nei comandi definiti in package.json (ad esempio : {"start": "next start -p 8080"})
 ENV PORT=8080
 
 # Imposta la directory di lavoro
@@ -84,9 +87,9 @@ COPY --chown=node:node --from=builder /app/.next/standalone ./
 # COPY --chown=node:node --from=builder /app/package.json ./package.json
  
 # Espone la porta 8080 per Cloud Run
+# Per GCP sono obbligato ad esporre la porta 8080 (invece della 3000 di default)
 EXPOSE 8080
 
 # Avvia il server Next.js
-# CMD ["node", "server.js"]s
-# CMD ["npm", "start"] # richiede in package.json lo script {"start": "next start -p 8080"}
+# CMD ["npm", "start"]
 CMD ["node", ".next/standalone/server.js"]
