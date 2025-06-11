@@ -34,6 +34,19 @@ COPY . .
 # Costruisci il progetto in modalità standalone
 RUN npm run build
 
+# Modalità standalone – Dopo next build
+#
+# .next/
+# ├── standalone/
+# │   ├── server.js            ✅ entrypoint dell’app
+# │   ├── node_modules/        ✅ solo le dipendenze usate
+# │   ├── ...
+# │   ├── .next/static/
+# │   ├── public/
+# │   └── app/
+# |    
+# ├── static/                  ✅ assets pubblici
+
 # Copia la cartella public (asset statici)
 # Implemento il comando seguente, come descritto nella guida https://nextjs.org/docs/app/api-reference/config/next-config-js/output
 # cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/
@@ -57,26 +70,13 @@ ENV PORT=8080
 WORKDIR /app
 USER node
 
-# Modalità standalone – Dopo next build
-#
-# .next/
-# ├── standalone/
-# │   ├── server.js            ✅ entrypoint dell’app
-# │   ├── node_modules/        ✅ solo le dipendenze usate
-# │   ├── ...
-# │   ├── .next/static/
-# │   ├── public/
-# │   └── app/
-# |    
-# ├── static/                  ✅ assets pubblici
-
 # Copia solo la build ottimizzata dal builder
 COPY --chown=node:node --from=builder /app/.next/standalone ./
 # /
 # ├── standalone/
 # │   ├── server.js
 # │   ├── ...
-# │   ├── .next/
+# │   ├── .next/static/
 # │   ├── public/
 # │   └── app/
 
